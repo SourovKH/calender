@@ -1,7 +1,6 @@
-const getNumberOfDays = function (month) {
-  const monthsDays = [31, 28, 31, 30, 31, 30, 31, 30];
-
-  return monthsDays[month];
+const getNumberOfDays = function (year, month) {
+  const date = new Date(year, month);
+  return date.getUTCDate();
 };
 
 const getFirstDay = function (year, month) {
@@ -18,6 +17,13 @@ const chunk = function (list, size, overlap = 0) {
   return [currentChunk].concat(chunk(remaining, size, overlap));
 };
 
+const generateSequence = function(start, end) {
+  const sequence = new Array(end - start + 1).fill();
+  return sequence.map(function(_,i) {
+    return i + 1;
+  });
+}
+
 const applyPadding = function (padding, text) {
   return text.toString().padStart(padding);
 };
@@ -26,28 +32,30 @@ const weekToString = function (week) {
   return week.map(applyPadding.bind(null, 2)).join(" ");
 };
 
-const renderCalender = function (calender, month, year) {
+const renderCalender = function (dates, month, year) {
   const header = `\t${month} ${year}`;
   const days = "Su Mo Tu We Th Fr Sa";
 
-  const weeks = calender.map(function (week) {
+  const weeks = dates.map(function (week) {
       return weekToString(week);
   }).join("\n");
 
   return `${header}\n${days}\n${weeks}\n`;
 };
 
-const generateCalander = function (year, month) {
+const generateDates = function (year, month) {
   const monthStartsOn = getFirstDay(year, month);
 
-  const calender = new Array(monthStartsOn).fill(" ");
-  const noOfDays = getNumberOfDays(month);
+  console.log(monthStartsOn);
 
-  for (let date = 1; date <= noOfDays; date++) {
-    calender.push(date);
-  }
+  const leftPad = new Array(monthStartsOn).fill(' ');
+  const noOfDays = getNumberOfDays(year, month + 1);
 
+  const dates = generateSequence(1, noOfDays);
+  const calender = leftPad.concat(dates);
+  
   return chunk(calender, 7);
 };
 
-console.log(renderCalender(generateCalander(2023, 5), "June", 2023));
+exports.renderCalender = renderCalender;
+exports.generateDates = generateDates;
