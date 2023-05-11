@@ -37,7 +37,7 @@ const renderCalender = function (dates, month, year) {
   const days = "Su Mo Tu We Th Fr Sa";
 
   const weeks = dates.map(function (week) {
-      return weekToString(week);
+    return weekToString(week);
   }).join("\n");
 
   return `${header}\n${days}\n${weeks}\n`;
@@ -45,12 +45,8 @@ const renderCalender = function (dates, month, year) {
 
 const generateDates = function (year, month) {
   const monthStartsOn = getFirstDay(year, month);
-
-  console.log(monthStartsOn);
-
   const leftPad = new Array(monthStartsOn).fill(' ');
   const noOfDays = getNumberOfDays(year, month + 1);
-
   const dates = generateSequence(1, noOfDays);
   const calender = leftPad.concat(dates);
   
