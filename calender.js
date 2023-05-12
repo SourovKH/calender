@@ -7,20 +7,19 @@ const getFirstDay = function (year, month) {
   return new Date(year, month, 1).getDay();
 };
 
-const chunk = function (list, size, overlap = 0) {
+const chunk = function (list, size) {
   if (list.length === 0) return list;
 
-  if (list.length <= overlap) return [list];
-
   const currentChunk = list.slice(0, size);
-  const remaining = list.slice(size - overlap);
-  return [currentChunk].concat(chunk(remaining, size, overlap));
+  const remaining = list.slice(size);
+
+  return [currentChunk].concat(chunk(remaining, size));
 };
 
 const generateSequence = function(start, end) {
   const sequence = new Array(end - start + 1).fill();
   return sequence.map(function(_,i) {
-    return i + 1;
+    return i + start;
   });
 }
 
@@ -32,13 +31,17 @@ const weekToString = function (week) {
   return week.map(applyPadding.bind(null, 2)).join(" ");
 };
 
-const renderCalender = function (dates, month, year) {
-  const header = `\t${month} ${year}`;
+const centerAlign = function(text, width) {
+  let alignedText = text.padStart((width + text.length) / 2);
+  return alignedText.padEnd(width);
+}
+
+const renderCalendar = function (dates, month, year) {
+  const headerText = `${month} ${year}`;
+  const header = centerAlign(headerText, 20);
   const days = "Su Mo Tu We Th Fr Sa";
 
-  const weeks = dates.map(function (week) {
-    return weekToString(week);
-  }).join("\n");
+  const weeks = dates.map(weekToString).join("\n");
 
   return `${header}\n${days}\n${weeks}\n`;
 };
@@ -53,5 +56,5 @@ const generateDates = function (year, month) {
   return chunk(calender, 7);
 };
 
-exports.renderCalender = renderCalender;
+exports.renderCalendar = renderCalendar;
 exports.generateDates = generateDates;
