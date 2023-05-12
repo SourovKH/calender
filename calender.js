@@ -40,7 +40,6 @@ const renderCalendar = function (dates, month, year) {
   const headerText = `${month} ${year}`;
   const header = centerAlign(headerText, 20);
   const days = "Su Mo Tu We Th Fr Sa";
-
   const weeks = dates.map(weekToString).join("\n");
 
   return `${header}\n${days}\n${weeks}\n`;
